@@ -2,7 +2,7 @@
 
 import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import React from 'react'
-import { useQuery } from 'react-query';
+import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
 import DeleteModal from './DeleteModal';
 
@@ -17,10 +17,20 @@ const fetchTodos = async () => {
     return response.data;
 };
 
+const deleteTodo = async (id) => {
+    await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
+};
+
 const TodoListing = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedTodo, setSelectedTodo] = React.useState(null);
-  const { data: todos, isLoading, error } = useQuery('todos', fetchTodos);
+  const { data: todos, isLoading, error, refetch } = useQuery('todos', fetchTodos);
+  const deleteMutation = useMutation(deleteTodo, {
+    onSuccess: () => {
+      refetch();
+      onClose();
+    },
+  });
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -31,14 +41,12 @@ const TodoListing = () => {
   }
 
   const handleDelete = (todoId) => {
-    console.log(todoId)
     setSelectedTodo(todoId);
     onOpen();
   };
 
   const handleConfirmDelete = () => {
-    // Handle edit logic for a specific todo
-    console.log(`Edit todo with ID: ${selectedTodo}`);
+    deleteMutation.mutate(selectedTodo);
   };
 
   return (
