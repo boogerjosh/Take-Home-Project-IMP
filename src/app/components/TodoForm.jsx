@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Switch, VStack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 
-const TodoFrom = () => {
+const TodoForm = () => {
   const { handleSubmit, register, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
@@ -46,4 +46,4 @@ const TodoFrom = () => {
   )
 }
 
-export default TodoFrom
+export default TodoForm
