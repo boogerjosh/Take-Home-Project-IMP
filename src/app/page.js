@@ -1,10 +1,12 @@
 "use client"
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import Header from "./components/Header"
+import TodoFrom from "./components/TodoFrom"
 
 export default function Home() {
   return (
     <main>
-      <Button colorScheme='blue'>Button</Button>
+      <Header/>
+      <TodoFrom/>
     </main>
   )
 }
