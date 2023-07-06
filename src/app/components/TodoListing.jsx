@@ -2,7 +2,7 @@
 
 import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import React from 'react'
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import DeleteModal from './DeleteModal';
 
@@ -22,13 +22,15 @@ const deleteTodo = async (id) => {
 };
 
 const TodoListing = () => {
+  const queryClient = useQueryClient()  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedTodo, setSelectedTodo] = React.useState(null);
-  const { data: todos, isLoading, error, refetch } = useQuery('todos', fetchTodos);
+  const { data: todos, isLoading, error } = useQuery('todos', fetchTodos);
+
   const deleteMutation = useMutation(deleteTodo, {
     onSuccess: () => {
-      refetch();
-      onClose();
+      const updatedTodos = todos.filter((todo) => todo.id !== selectedTodo);
+      queryClient.setQueryData('todos', updatedTodos); 
     },
   });
 
@@ -47,6 +49,7 @@ const TodoListing = () => {
 
   const handleConfirmDelete = () => {
     deleteMutation.mutate(selectedTodo);
+    onClose();
   };
 
   return (
@@ -68,7 +71,7 @@ const TodoListing = () => {
               <Td>{todo.title}</Td>
               <Td>{todo.completed ? 'Completed' : 'Pending'}</Td>
               <Td>
-                <Button colorScheme="teal" size="sm" mr={2} onClick={() => handleEdit(todo.id)}>
+                <Button colorScheme="teal" size="sm" mr={2}>
                   Edit
                 </Button>
                 <Button colorScheme="red" size="sm" onClick={() => handleDelete(todo.id)}>
