@@ -1,6 +1,6 @@
 "use client"
 
-import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
 import React from 'react'
 import { useMutation, useQueryClient } from 'react-query';
 import DeleteModal from './DeleteModal';
