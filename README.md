@@ -22,23 +22,26 @@ Make sure you have the following installed on your machine:
 ### Installation
 
 1. Clone the repository:
-
-```git clone https://github.com/your-username/nextjs-todo-app.git```
+```bash
+git clone https://github.com/your-username/nextjs-todo-app.git
+```
 
 2. Navigate into the project directory:
-
 ```bash
-cd nextjs-todo-app
+cd Take-Home-Project-IMP
+```
 
 3. Install the dependencies:
 ```bash
 npm install
+```
 
 ### Running the App
 
 1. Start the development server:
 ```bash
 npm run dev
+```
 
 2. Open your browser and navigate to http://localhost:3000 to view the app.
 
@@ -51,4 +54,3 @@ This project is built using the following technologies:
 - React Hook Form: https://react-hook-form.com/
 - React Query: https://react-query.tanstack.com/
 - Axios: https://axios-http.com/
-````
