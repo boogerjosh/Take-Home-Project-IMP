@@ -1,9 +1,10 @@
 "use client"
 
-import { Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
+import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import React from 'react'
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import DeleteModal from './DeleteModal';
 
 const fetchTodos = async () => {
     const response = await axios.get('https://jsonplaceholder.typicode.com/todos', {
@@ -17,6 +18,8 @@ const fetchTodos = async () => {
 };
 
 const TodoListing = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedTodo, setSelectedTodo] = React.useState(null);
   const { data: todos, isLoading, error } = useQuery('todos', fetchTodos);
 
   if (isLoading) {
@@ -27,14 +30,15 @@ const TodoListing = () => {
     return <Text>An error occurred: {error.message}</Text>;
   }
 
-  const handleDelete = (id) => {
-    // Handle delete logic for a specific todo
-    console.log(`Delete todo with ID: ${id}`);
+  const handleDelete = (todoId) => {
+    console.log(todoId)
+    setSelectedTodo(todoId);
+    onOpen();
   };
 
-  const handleEdit = (id) => {
+  const handleConfirmDelete = () => {
     // Handle edit logic for a specific todo
-    console.log(`Edit todo with ID: ${id}`);
+    console.log(`Edit todo with ID: ${selectedTodo}`);
   };
 
   return (
@@ -67,6 +71,12 @@ const TodoListing = () => {
           ))}
         </Tbody>
       </Table>
+      <DeleteModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onConfirmDelete={handleConfirmDelete}
+        todo={selectedTodo}
+      />
     </Box>
   )
 }
