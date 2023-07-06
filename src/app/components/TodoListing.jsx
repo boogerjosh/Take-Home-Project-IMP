@@ -34,7 +34,7 @@ const TodoListing = ({ todos, isLoading, error }) => {
   };
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Text padding={5}>Loading...</Text>;
   }
 
   if (error) {
