@@ -1,4 +1,6 @@
-import React from 'react';
+"use client"
+
+import React, {useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Modal,
@@ -39,7 +41,7 @@ const EditModal = ({ isOpen, onClose, todo, queryClient, todos }) => {
     editMutation.mutate(updatedTodo);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isOpen) {
       reset(todo);
     }

@@ -11,7 +11,7 @@ import {
     ModalFooter,
   } from '@chakra-ui/react';
 
-const DeleteModal = ({ isOpen, onClose, onConfirmDelete, todo }) => {
+const DeleteModal = ({ isOpen, onClose, onConfirmDelete }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -21,7 +21,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirmDelete, todo }) => {
           <Text>Are you sure you want to delete the todo?</Text>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="red" onClick={onConfirmDelete} marginRight={2}>
+          <Button colorScheme="red" onClick={onConfirmDelete} marginRight={3}>
             Delete
           </Button>
           <Button variant="ghost" onClick={onClose}>

@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Switch, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Switch, VStack, Heading } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from 'react-query';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,6 +33,9 @@ const TodoForm = ({todos}) => {
 
   return (
     <Box maxW="md" mx="auto" mt={4} border="">
+      <Heading as="h3" size="md" my={4}>
+        Create new Todo
+      </Heading>
       <form onSubmit={handleSubmit(onSubmit)}>
         <VStack spacing={4}>
           <FormControl isInvalid={errors.title}>

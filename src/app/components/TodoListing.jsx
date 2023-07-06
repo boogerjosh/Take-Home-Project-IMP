@@ -1,30 +1,22 @@
 "use client"
 
 import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr } from '@chakra-ui/react';
-import React from 'react'
+import React, {useState} from 'react';
 import { useMutation, useQueryClient } from 'react-query';
-import DeleteModal from './DeleteModal';
-import EditModal from './EditModal';
+import { EditModal, DeleteModal } from '../components';
 
-const TodoListing = ({todos, isLoading, error}) => {
-  const queryClient = useQueryClient()  
+const TodoListing = ({ todos, isLoading, error }) => {
+  const queryClient = useQueryClient();
   const { isOpen: isDeleteModalOpen, onOpen: openDeleteModal, onClose: closeDeleteModal } = useDisclosure();
   const { isOpen: isEditModalOpen, onOpen: openEditModal, onClose: closeEditModal } = useDisclosure();
-  const [selectedTodo, setSelectedTodo] = React.useState(null);
+  const [selectedTodo, setSelectedTodo] = useState(null);
 
-  const deleteMutation = useMutation({mutationFn: (todoId) => {
-    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
-    queryClient.setQueryData('todos', updatedTodos); 
-  }
+  const deleteMutation = useMutation({
+    mutationFn: (todoId) => {
+      const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+      queryClient.setQueryData('todos', updatedTodos);
+    },
   });
-
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {v
-    return <Text>An error occurred: {error.message}</Text>;
-  }
 
   const handleDelete = (todoId) => {
     setSelectedTodo(todoId);
@@ -40,6 +32,14 @@ const TodoListing = ({todos, isLoading, error}) => {
     setSelectedTodo(todo);
     openEditModal();
   };
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (error) {
+    return <Text>An error occurred: {error.message}</Text>;
+  }
 
   return (
     <Box padding={5}>
@@ -75,9 +75,8 @@ const TodoListing = ({todos, isLoading, error}) => {
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
         onConfirmDelete={handleConfirmDelete}
-        todo={selectedTodo}
       />
-       <EditModal
+      <EditModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}
         todo={selectedTodo}
@@ -85,7 +84,7 @@ const TodoListing = ({todos, isLoading, error}) => {
         todos={todos}
       />
     </Box>
-  )
-}
+  );
+};
 
-export default TodoListing
+export default TodoListing;
