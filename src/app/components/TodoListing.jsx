@@ -6,7 +6,13 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 
 const fetchTodos = async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
+    const response = await axios.get('https://jsonplaceholder.typicode.com/todos', {
+        params: {
+        _limit: 10, // Limiting to 10 results
+        _sort: 'id', // Sorting by ID in ascending order (assuming higher IDs are newer)
+        _order: 'desc' // Sorting in descending order to get the newest data first
+        }
+    });
     return response.data;
 };
 
@@ -32,7 +38,7 @@ const TodoListing = () => {
   };
 
   return (
-    <Box>
+    <Box padding={5}>
       <Heading as="h1" size="2xl" my={4}>
         Todo List
       </Heading>
