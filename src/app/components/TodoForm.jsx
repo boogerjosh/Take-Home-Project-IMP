@@ -7,12 +7,15 @@ import { v4 as uuidv4 } from 'uuid';
 
 const TodoForm = ({todos}) => {
   const queryClient = useQueryClient()  
-  const { handleSubmit, register, formState: { errors } } = useForm();
+  const { handleSubmit, register, formState: { errors }, reset } = useForm();
 
   const addTodo = useMutation({
     mutationFn: (newTodo) => {
       todos.push(newTodo);
       queryClient.setQueryData('todos', todos);
+    },
+    onSuccess: () => {
+      reset(); // Reset the form inputs to empty
     }
   })
 

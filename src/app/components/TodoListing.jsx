@@ -3,41 +3,42 @@
 import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import React from 'react'
 import { useMutation, useQueryClient } from 'react-query';
-import axios from 'axios';
 import DeleteModal from './DeleteModal';
-
-const deleteTodo = async (id) => {
-    await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
-};
+import EditModal from './EditModal';
 
 const TodoListing = ({todos, isLoading, error}) => {
   const queryClient = useQueryClient()  
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isDeleteModalOpen, onOpen: openDeleteModal, onClose: closeDeleteModal } = useDisclosure();
+  const { isOpen: isEditModalOpen, onOpen: openEditModal, onClose: closeEditModal } = useDisclosure();
   const [selectedTodo, setSelectedTodo] = React.useState(null);
 
-  const deleteMutation = useMutation(deleteTodo, {
-    onSuccess: () => {
-      const updatedTodos = todos.filter((todo) => todo.id !== selectedTodo);
-      queryClient.setQueryData('todos', updatedTodos); 
-    },
+  const deleteMutation = useMutation({mutationFn: (todoId) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== todoId);
+    queryClient.setQueryData('todos', updatedTodos); 
+  }
   });
 
   if (isLoading) {
     return <Text>Loading...</Text>;
   }
 
-  if (error) {
+  if (error) {v
     return <Text>An error occurred: {error.message}</Text>;
   }
 
   const handleDelete = (todoId) => {
     setSelectedTodo(todoId);
-    onOpen();
+    openDeleteModal();
   };
 
   const handleConfirmDelete = () => {
     deleteMutation.mutate(selectedTodo);
-    onClose();
+    closeDeleteModal();
+  };
+
+  const handleEdit = (todo) => {
+    setSelectedTodo(todo);
+    openEditModal();
   };
 
   return (
@@ -59,7 +60,7 @@ const TodoListing = ({todos, isLoading, error}) => {
               <Td>{todo.title}</Td>
               <Td>{todo.completed ? 'Completed' : 'Pending'}</Td>
               <Td>
-                <Button colorScheme="teal" size="sm" mr={2}>
+                <Button colorScheme="teal" size="sm" mr={2} onClick={() => handleEdit(todo)}>
                   Edit
                 </Button>
                 <Button colorScheme="red" size="sm" onClick={() => handleDelete(todo.id)}>
@@ -71,10 +72,17 @@ const TodoListing = ({todos, isLoading, error}) => {
         </Tbody>
       </Table>
       <DeleteModal
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
         onConfirmDelete={handleConfirmDelete}
         todo={selectedTodo}
+      />
+       <EditModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        todo={selectedTodo}
+        queryClient={queryClient}
+        todos={todos}
       />
     </Box>
   )
