@@ -2,19 +2,30 @@
 import React from 'react'
 import { Box, Button, FormControl, FormErrorMessage, FormLabel, Input, Switch, VStack } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
+import { useMutation, useQueryClient } from 'react-query';
+import { v4 as uuidv4 } from 'uuid';
 
-const TodoForm = () => {
+const TodoForm = ({todos}) => {
+  const queryClient = useQueryClient()  
   const { handleSubmit, register, formState: { errors } } = useForm();
+
+  const addTodo = useMutation({
+    mutationFn: (newTodo) => {
+      todos.push(newTodo);
+      queryClient.setQueryData('todos', todos);
+    }
+  })
 
   const onSubmit = (data) => {
     // Handle form submission
     const todo = {
         userId: 1,
-        id: 1,
+        id: uuidv4(),
         title: data.title,
         completed: data.completed || false
     };
-    console.log(todo);
+    
+    addTodo.mutate(todo);
   };
 
   return (

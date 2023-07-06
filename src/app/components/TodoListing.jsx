@@ -2,30 +2,18 @@
 
 import { useDisclosure, Box, Button, Heading, Table, Tbody, Td, Text, Th, Thead, Tr, VStack } from '@chakra-ui/react';
 import React from 'react'
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import DeleteModal from './DeleteModal';
-
-const fetchTodos = async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/todos', {
-        params: {
-        _limit: 10, // Limiting to 10 results
-        _sort: 'id', // Sorting by ID in ascending order (assuming higher IDs are newer)
-        _order: 'desc' // Sorting in descending order to get the newest data first
-        }
-    });
-    return response.data;
-};
 
 const deleteTodo = async (id) => {
     await axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`);
 };
 
-const TodoListing = () => {
+const TodoListing = ({todos, isLoading, error}) => {
   const queryClient = useQueryClient()  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedTodo, setSelectedTodo] = React.useState(null);
-  const { data: todos, isLoading, error } = useQuery('todos', fetchTodos);
 
   const deleteMutation = useMutation(deleteTodo, {
     onSuccess: () => {

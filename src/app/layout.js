@@ -1,5 +1,7 @@
 import './globals.css'
+
 import Chakra from './components/Chakra'
+import QueryClientProv from './components/QueryClientProv'
 
 export const metadata = {
   title: 'Create Next App',
@@ -10,9 +12,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Chakra>
-          {children}
-        </Chakra>
+        <QueryClientProv>
+          <Chakra>
+            {children}
+          </Chakra>
+        </QueryClientProv>
       </body>
     </html>
   )
